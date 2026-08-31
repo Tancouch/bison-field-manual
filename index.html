@@ -1,3 +1,4 @@
+<!doctype html>
 <meta charset="utf-8">
 <title>Bison Field Manual</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1912,4 +1913,193 @@ if("serviceWorker" in navigator && secure){
     navigator.serviceWorker.register("sw.js").catch(function(){});
   });
 }
+</script>
+
+<style>
+/* ============================ search ============================ */
+.sbtn{display:flex;align-items:center;gap:9px;width:100%;margin:2px 0 14px;padding:8px 10px;
+  background:transparent;border:1px solid var(--rule);border-radius:8px;cursor:pointer;
+  color:var(--fg-muted);font:12px Poppins,sans-serif;letter-spacing:.04em;text-align:left}
+.sbtn:hover{color:var(--fg-strong);border-color:var(--fg-muted)}
+.sbtn svg{width:13px;height:13px;flex:none}
+.sbtn .kbd{margin-left:auto;font-size:10px;border:1px solid var(--rule);border-radius:4px;padding:1px 5px}
+.topbar .sbtn{width:auto;margin:0;padding:9px 11px;flex:none}
+.topbar .sbtn .kbd,.topbar .sbtn span.lbl{display:none}
+.sdim{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.45);backdrop-filter:blur(2px);
+  display:none;align-items:flex-start;justify-content:center;padding:9vh 16px 16px}
+.sdim.on{display:flex}
+.spanel{width:100%;max-width:600px;background:var(--field);border:1px solid var(--field-border);
+  border-radius:12px;box-shadow:0 24px 64px rgba(0,0,0,.35);overflow:hidden}
+.spanel input{width:100%;box-sizing:border-box;padding:16px 18px;border:0;outline:0;background:transparent;
+  color:var(--fg-strong);font:15px Poppins,sans-serif}
+.spanel input::placeholder{color:var(--fg-muted)}
+.sres{max-height:56vh;overflow-y:auto;border-top:1px solid var(--rule)}
+.sres:empty{display:none}
+.sres a{display:block;padding:12px 18px;text-decoration:none;border-bottom:1px solid var(--rule)}
+.sres a:last-child{border-bottom:0}
+.sres a .where{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--brown-ink);margin-bottom:3px}
+.sres a .t{font-family:"The National",Poppins,sans-serif;font-weight:600;font-size:15px;color:var(--fg-strong)}
+.sres a .snip{margin-top:3px;font-size:12.5px;line-height:1.5;color:var(--fg-muted)}
+.sres a .snip mark{background:transparent;color:var(--brown-ink);font-weight:600}
+.sres a.sel,.sres a:hover{background:rgba(125,64,19,.08)}
+.sres .none{padding:16px 18px;font-size:13px;color:var(--fg-muted)}
+.search-hit{animation:searchhit 2.2s ease-out}
+@keyframes searchhit{0%,55%{box-shadow:0 0 0 3px var(--brown-ink);border-radius:6px}100%{box-shadow:0 0 0 3px transparent}}
+@media print{.sbtn,.sdim{display:none!important}}
+</style>
+<script>
+/* ============================ search ============================ */
+(function(){
+  function $(id){return document.getElementById(id);}
+  function txt(s){return (s||"").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim();}
+
+  /* ---- build the index ---- */
+  var INDEX=[];
+  function partLabel(sec){
+    var num=sec.querySelector(".kicker .num");
+    return (num?txt(num.textContent):"")||("Part "+sec.id.replace("p",""));
+  }
+  var uid=0;
+  function anchor(elm){ if(!elm.id){elm.id="s-u"+(++uid);} return elm.id; }
+
+  function buildIndex(){
+    INDEX=[];
+    document.querySelectorAll("section.part").forEach(function(sec){
+      var where=partLabel(sec)+" \u00B7 "+(sec.dataset.title||"");
+      // static blocks: each heading owns the text until the next heading
+      var heads=sec.querySelectorAll("h2,h3,h4");
+      heads.forEach(function(h){
+        if(h.closest(".prod,.faq,.gloss"))return;
+        var body=[],n=h.nextElementSibling;
+        while(n&&!/^H[2-4]$/.test(n.tagName)&&!n.matches(".prods,.faq,.gloss,.filters")){
+          body.push(txt(n.textContent)); n=n.nextElementSibling;
+        }
+        INDEX.push({t:txt(h.textContent),w:where,b:body.join(" ").slice(0,700),id:anchor(h)});
+      });
+    });
+    var p3=$("p3")?partLabel($("p3"))+" \u00B7 The Library":"Part 03";
+    (window.PRODUCTS||[]).forEach(function(p){
+      var bits=[p.tag,p.how,p.watch,p.agent,p.adv].map(txt).join(" ");
+      (p.d||[]).forEach(function(pair){bits+=" "+pair[0]+" "+pair[1];});
+      INDEX.push({t:p.n,w:p3,b:bits,prod:p.n});
+    });
+    var p8=$("p8")?partLabel($("p8"))+" \u00B7 Field Answers":"Part 08";
+    (window.FAQ||[]).forEach(function(q){INDEX.push({t:q[0],w:p8,b:txt(q[1]),faq:q[0]});});
+    var p9=$("p9")?partLabel($("p9"))+" \u00B7 Glossary":"Part 09";
+    (window.GLOSS||[]).forEach(function(g){INDEX.push({t:g[0],w:p9,b:txt(g[1]),gloss:g[0]});});
+  }
+
+  /* ---- query ---- */
+  function search(q){
+    q=q.toLowerCase().trim(); if(q.length<2)return[];
+    var words=q.split(/\s+/);
+    var out=[];
+    INDEX.forEach(function(e){
+      var tl=e.t.toLowerCase(),bl=e.b.toLowerCase(),score=0;
+      var all=words.every(function(w){return tl.indexOf(w)>=0||bl.indexOf(w)>=0;});
+      if(!all)return;
+      words.forEach(function(w){
+        if(tl.indexOf(w)>=0)score+=6;
+        if(tl.indexOf(w)===0)score+=3;
+        var c=bl.split(w).length-1;score+=Math.min(c,4);
+      });
+      out.push({e:e,s:score});
+    });
+    out.sort(function(a,b){return b.s-a.s;});
+    return out.slice(0,9).map(function(x){return x.e;});
+  }
+  function snippet(e,q){
+    var words=q.toLowerCase().trim().split(/\s+/),bl=e.b.toLowerCase(),pos=-1,hit="";
+    words.forEach(function(w){var i=bl.indexOf(w);if(i>=0&&(pos<0||i<pos)){pos=i;hit=w;}});
+    if(pos<0)return e.b.slice(0,110);
+    var start=Math.max(0,pos-45),cut=e.b.slice(start,start+150);
+    if(start>0)cut="\u2026"+cut;
+    return cut.replace(new RegExp("("+words.filter(Boolean).map(function(w){return w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}).join("|")+")","gi"),"<mark>$1</mark>");
+  }
+
+  /* ---- jump ---- */
+  function flash(elm){
+    elm.scrollIntoView({block:"center"});
+    elm.classList.remove("search-hit");void elm.offsetWidth;elm.classList.add("search-hit");
+  }
+  function go(e){
+    close();
+    if(e.prod){
+      try{
+        if(window.famSel&&window.famSel.size)famSel.clear();
+        if(window.scenSel&&window.scenSel.size)scenSel.clear();
+        if(window.renderProds){renderProds();
+          document.querySelectorAll("#famfilter .chip.on,#scenfilter .chip.on").forEach(function(c){c.classList.remove("on");});}
+      }catch(err){}
+      var card=null;
+      document.querySelectorAll("#prods .prod h3").forEach(function(h){if(txt(h.textContent)===e.prod)card=h.closest(".prod");});
+      if(card){var det=card.querySelector("details");if(det)det.open=true;flash(card);return;}
+      location.hash="#p3";return;
+    }
+    if(e.faq){
+      var hitF=null;
+      document.querySelectorAll("#faq *").forEach(function(n){
+        if(!hitF&&n.children.length===0&&txt(n.textContent)===e.faq)hitF=n;});
+      if(hitF){var box=hitF.closest("details")||hitF.closest("#faq > *")||hitF;
+        if(box.tagName==="DETAILS")box.open=true;flash(box);return;}
+      location.hash="#p8";return;
+    }
+    if(e.gloss){
+      var hitG=null;
+      document.querySelectorAll("#gloss dt").forEach(function(n){if(!hitG&&txt(n.textContent)===e.gloss)hitG=n;});
+      if(hitG){flash(hitG);return;}
+      location.hash="#p9";return;
+    }
+    var t=$(e.id);if(t)flash(t);
+  }
+
+  /* ---- UI ---- */
+  var dim=document.createElement("div");dim.className="sdim";
+  dim.innerHTML='<div class="spanel"><input type="search" placeholder="Search the manual \u2014 programs, terms, answers\u2026" aria-label="Search the manual"><div class="sres"></div></div>';
+  document.body.appendChild(dim);
+  var inp=dim.querySelector("input"),res=dim.querySelector(".sres"),cur=-1,items=[];
+
+  function open(){buildIndexOnce();dim.classList.add("on");inp.value="";res.innerHTML="";cur=-1;items=[];setTimeout(function(){inp.focus();},0);}
+  function close(){inp.blur();dim.classList.remove("on");}
+  var built=false;function buildIndexOnce(){if(!built){buildIndex();built=true;}}
+
+  dim.addEventListener("mousedown",function(ev){if(ev.target===dim)close();});
+  inp.addEventListener("input",function(){
+    var q=inp.value;items=search(q);cur=items.length?0:-1;
+    if(!q.trim()){res.innerHTML="";return;}
+    if(!items.length){res.innerHTML='<div class="none">Nothing in the manual matches that. Try a program name, a term, or a client question.</div>';return;}
+    res.innerHTML=items.map(function(e,i){
+      return '<a href="#" data-i="'+i+'"'+(i===0?' class="sel"':'')+'><div class="where">'+e.w+'</div><div class="t">'+e.t+'</div><div class="snip">'+snippet(e,q)+"</div></a>";
+    }).join("");
+    Array.prototype.forEach.call(res.querySelectorAll("a"),function(a){
+      a.addEventListener("click",function(ev){ev.preventDefault();go(items[+a.dataset.i]);});
+    });
+  });
+  function mark(){Array.prototype.forEach.call(res.querySelectorAll("a"),function(a,i){a.classList.toggle("sel",i===cur);
+    if(i===cur)a.scrollIntoView({block:"nearest"});});}
+  inp.addEventListener("keydown",function(ev){
+    if(ev.key==="ArrowDown"){ev.preventDefault();if(cur<items.length-1){cur++;mark();}}
+    else if(ev.key==="ArrowUp"){ev.preventDefault();if(cur>0){cur--;mark();}}
+    else if(ev.key==="Enter"){ev.preventDefault();if(cur>=0&&items[cur])go(items[cur]);}
+    else if(ev.key==="Escape"){close();}
+  });
+  document.addEventListener("keydown",function(ev){
+    if(ev.key==="Escape"&&dim.classList.contains("on"))close();
+    if((ev.key==="/"||((ev.metaKey||ev.ctrlKey)&&ev.key==="k"))&&!dim.classList.contains("on")){
+      var a=document.activeElement;
+      if(a&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA"||a.tagName==="SELECT"||a.isContentEditable))return;
+      ev.preventDefault();open();
+    }
+  });
+
+  var ICON='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="M10.4 10.4 14 14"/></svg>';
+  function makeBtn(kbd){
+    var b=document.createElement("button");b.type="button";b.className="sbtn";
+    b.innerHTML=ICON+'<span class="lbl">Search the manual</span>'+(kbd?'<span class="kbd">/</span>':"");
+    b.addEventListener("click",open);return b;
+  }
+  var nav=$("spinenav");if(nav)nav.parentNode.insertBefore(makeBtn(true),nav);
+  var barRow=document.querySelector(".topbar");
+  if(barRow)barRow.appendChild(makeBtn(false));
+})();
 </script>
