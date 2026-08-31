@@ -1,5 +1,5 @@
-/* Bison Field Manual service worker, build ae31a9c605 */
-var CACHE = "bison-manual-ae31a9c605";
+/* Bison Field Manual service worker, build 6bb27a4073 */
+var CACHE = "bison-manual-6bb27a4073";
 var CORE = ["./", "./index.html", "./manifest.webmanifest",
             "./icons/icon-192.png", "./icons/icon-512.png",
             "./icons/apple-touch-icon.png", "./icons/favicon-32.png"];
