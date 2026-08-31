@@ -580,7 +580,7 @@ footer.legal .eh svg{width:26px;height:26px;flex:none}
         <div class="part-head">
           <div class="kicker"><span class="num">PART 03</span><span class="label">The Library</span></div>
           <h2>EVERY PRODUCT<br>WE OFFER</h2>
-          <p class="dek">Twenty programs, grouped four ways. Filter by family, or by the client sitting
+          <p class="dek">Twenty-one programs, grouped four ways. Filter by family, or by the client sitting
           in front of you.</p>
         </div>
 
@@ -1388,13 +1388,21 @@ var PRODUCTS=[
  agent:"Worth modeling any time a seller is offering a concession, alongside the temporary buydown option.",
  adv:"Points on a purchase are generally deductible in the year paid. On a refinance they are amortized over the loan term, which changes the calculation materially."},
 
-{f:"specialty",n:"HELOC and Closed-End Second",s:["moveup","investor","retiree"],
- tag:"Accesses equity without touching a first mortgage the client would not want to replace.",
- d:[["Position","Second lien"],["CLTV","To 85% typical"],["HELOC","Variable, revolving"],["Second","Fixed, lump sum"]],
- how:"A line of credit draws and repays like a credit card at a variable rate. A closed-end second is a fixed-rate lump sum with a set term. Either preserves the existing first mortgage, which is decisive when that first carries a rate well below the current market.",
- watch:"Combined loan to value across both liens drives eligibility and pricing. Variable rate lines can reprice, so a client relying on the payment should consider the fixed second instead.",
- agent:"How a move-up buyer accesses a down payment without selling first, and how a client funds a renovation after closing.",
- adv:"Compare the blended cost of first plus second against a new consolidated first before recommending a cash-out. Deductibility still depends on use of proceeds, not on the collateral."},
+{f:"specialty",n:"HELOC",s:["moveup","investor","retiree","lowcash"],
+ tag:"A revolving line of credit secured by the home. Draw what you need, repay, draw again.",
+ d:[["Position","Second lien"],["CLTV","To 85% typical"],["Rate","Variable"],["Structure","Draw then repay"]],
+ how:"A line of credit against the equity in the home that works like a credit card: the client draws what they need, pays interest only on the drawn balance, and the availability replenishes as they repay. A draw period of roughly ten years is followed by a repayment period. It sits behind the existing first mortgage, so a low first-mortgage rate is preserved untouched.",
+ watch:"The rate is variable and can reprice, so a client budgeting a fixed payment is usually better served by the closed-end second. Combined loan to value across both liens drives eligibility and pricing. Watch for the payment shock when the draw period ends and principal begins amortizing.",
+ agent:"How a move-up buyer gets a down payment without selling first, and how a client funds a renovation after closing. It is also the quiet answer when a buyer is short on cash but rich in equity elsewhere.",
+ adv:"The right tool when the need is uncertain in size or timing, since undrawn availability costs nothing. A standby line established while the client still qualifies is a legitimate liquidity buffer. Deductibility still depends on use of proceeds, not on the collateral."},
+
+{f:"specialty",n:"Closed-End Second",s:["moveup","investor","retiree"],
+ tag:"A fixed-rate lump sum behind the first mortgage. Known payment, known payoff date.",
+ d:[["Position","Second lien"],["CLTV","To 85% typical"],["Rate","Fixed"],["Structure","Lump sum, set term"]],
+ how:"A one-time advance at a fixed rate over a set term, sitting behind the existing first mortgage. The client gets the full amount at closing and a payment that never changes. Where a cash-out refinance would replace a first mortgage carrying a rate well below the current market, this leaves that first mortgage alone.",
+ watch:"The money comes all at once, so it suits a known cost rather than an open-ended need. Compare the blended rate of keeping the first and adding a second against the rate on a new larger first before assuming either is cheaper.",
+ agent:"The cleaner option when the client knows exactly what they need and wants a payment they can plan around, such as a defined renovation budget or a specific down payment.",
+ adv:"Run the blended-cost comparison against a cash-out refinance before recommending either. Preserving a below-market first mortgage is frequently worth more than the rate difference on the second. Deductibility depends on use of proceeds, not on the collateral."},
 
 {f:"specialty",n:"Reverse Mortgage, HECM",s:["retiree"],
  tag:"For borrowers 62 and older. Converts equity to cash, a line of credit, or monthly payments with no required mortgage payment.",
