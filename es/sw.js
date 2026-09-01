@@ -1,8 +1,8 @@
 /* Bison Field Manual service worker, build 6bd753e8c8 */
-var CACHE = "bison-manual-6bd753e8c8";
+var CACHE = "bison-manual-es-6bd753e8c8";
 var CORE = ["./", "./index.html", "./manifest.webmanifest",
-            "./icons/icon-192.png", "./icons/icon-512.png",
-            "./icons/apple-touch-icon.png", "./icons/favicon-32.png"];
+            "../icons/icon-192.png", "../icons/icon-512.png",
+            "../icons/apple-touch-icon.png", "../icons/favicon-32.png"];
 
 self.addEventListener("install", function(e){
   self.skipWaiting();

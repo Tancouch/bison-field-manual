@@ -1,0 +1,14 @@
+{
+  "name": "Manual de Campo Bison",
+  "short_name": "Manual Bison",
+  "description": "Catalogo de productos, calculadora de pago y analisis fiscal para agentes de bienes raices y asesores financieros que trabajan con Bison Ventures.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#12215E",
+  "theme_color": "#12215E",
+  "icons": [
+    { "src": "../icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "../icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
