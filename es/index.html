@@ -1702,9 +1702,9 @@ function renderCalc(){
   if(c.upfrontLabel) flag(c.upfrontLabel+", suma "+money(c.financed)+" al monto del préstamo. Esto no es efectivo al cierre.");
   if(c.mi>0){
     if(c.miOffMonth) flag(c.miLabel+", aproximadamente "+money(c.mi)+" al mes, y se cae cerca del mes "+c.miOffMonth+" solo con los pagos programados.");
-    else flag(c.miLabel+", aproximadamente "+money(c.mi)+" al mes. En está estructura no se cae. Solo sale con un refinanciamiento.");
+    else flag(c.miLabel+", aproximadamente "+money(c.mi)+" al mes. En esta estructura no se cae. Solo sale con un refinanciamiento.");
   }
-  if(c.type==="conv"&&c.ltv>80&&c.ltv<=97&&c.dpct<20) flag("Con "+c.dpct.toFixed(1)+"% de enganche el cliente está a un escalón de un mejor factor de seguro hipotecario. Pregunte que haria falta para llegar al siguiente corte.");
+  if(c.type==="conv"&&c.ltv>80&&c.ltv<=97&&c.dpct<20) flag("Con "+c.dpct.toFixed(1)+"% de enganche el cliente está a un escalón de un mejor factor de seguro hipotecario. Pregunte que haría falta para llegar al siguiente corte.");
   if(c.income>0&&c.housingRatio>31) flag("Solo la vivienda representa "+c.housingRatio.toFixed(1)+"% del ingreso bruto antes de cualquier otra deuda. Confirme la deuda-ingreso completa antes de escribir la oferta.");
   if(c.type==="jumbo"&&c.ltv>80) flag("Arriba de 80% de relación préstamo-valor en jumbo las opciones se reducen bastante. Cotice esto con su oficial de préstamos antes de apoyarse en ello.");
   if(c.type==="va"&&c.dpct>0) flag("Un enganche en VA reduce la cuota de financiamiento pero rara vez se exige. Confirme que el cliente quiera usar su efectivo así.");
@@ -1712,7 +1712,7 @@ function renderCalc(){
   var say=$("o-say");
   var miSentence = c.mi>0
     ? " Eso incluye alrededor de "+money(c.mi)+" de seguro hipotecario, que "+(c.miOffMonth?"se quita cerca del mes "+c.miOffMonth:"se queda por toda la vida de este préstamo")+"."
-    : " En está estructura no hay seguro hipotecario.";
+    : " En esta estructura no hay seguro hipotecario.";
   say.textContent = "Su pago total a "+money(c.price)+" con "+c.dpct.toFixed(1)+
     "% de enganche es de aproximadamente "+money(c.total)+" al mes. Eso es capital e interés de "+money(c.pi)+
     ", más "+money(c.tax)+" de impuestos y "+money(c.ins)+" de seguro"+(c.hoa>0?", más "+money(c.hoa)+" de cuota de asociación":"")+"."+miSentence;
@@ -1779,9 +1779,9 @@ function renderTax(){
     ["Parte deducible de ese interés", deductibleInterest, deductibleShare<1?("limitado a "+money(acqCap)+" de deuda de adquisición, "+Math.round(deductibleShare*100)+"% de este préstamo"):null],
     ["Impuesto predial pagado", c.taxAnnual, null],
     ["Otros impuestos estatales y locales", stateInc, null],
-    ["SALT permitido despues del tope", saltAllowed, saltRaw>saltCap?("con tope, se pierden "+money(saltRaw-saltAllowed)):null],
+    ["SALT permitido después del tope", saltAllowed, saltRaw>saltCap?("con tope, se pierden "+money(saltRaw-saltAllowed)):null],
     ["Otras deducciones detalladas", other, null],
-    ["Total detallado", itemized, "suma de las lineas deducibles"],
+    ["Total detallado", itemized, "suma de las líneas deducibles"],
     ["Deducción estándar", std, "el número a superar"]
   ];
   var tb=$("t-table"); tb.innerHTML="";
@@ -1802,7 +1802,7 @@ function renderTax(){
     ro.appendChild(d);
   }
   item("Pago antes de impuestos", money(c.total),"/mo");
-  item("Pago despues de impuestos", money(afterTaxMonthly),"/mo");
+  item("Pago después de impuestos", money(afterTaxMonthly),"/mo");
   item("Beneficio mensual", money(benefit/12),"/mo");
   item("Tasa efectiva", (c.rate*(1-(benefit>0?mrate:0))).toFixed(2)+"%","aprox");
 
@@ -1814,8 +1814,8 @@ function renderTax(){
   if(benefit>0 && excess<3000) flag("El margen sobre la deducción estándar es delgado. Un cambio en donativos o en impuesto estatal podria borrarlo el próximo año, así que preséntelo como un rango y no como una promesa.");
 
   $("t-say").textContent = benefit>0
-    ? "A este precio y con está estructura, comprar probablemente le regrese alrededor de "+money(benefit)+" el primer año, más o menos "+money(benefit/12)+" al mes, lo que acerca el pago efectivo a "+money(afterTaxMonthly)+". Eso supone que usted detalla deducciones, y se va reduciendo conforme se amortiza el préstamo. Su contador debe confirmarlo antes de que usted cuente con ello."
-    : "Aquí no le voy a vender una deducción fiscal. Con una deducción estándar de "+money(std)+", lo más probable es que está hipoteca no cambie su declaración federal el primer año. El argumento para comprar es el pago, el costo fijo de vivienda y la plusvalía, no la deducción. Confírmelo con su contador.";
+    ? "A este precio y con esta estructura, comprar probablemente le regrese alrededor de "+money(benefit)+" el primer año, más o menos "+money(benefit/12)+" al mes, lo que acerca el pago efectivo a "+money(afterTaxMonthly)+". Eso supone que usted detalla deducciones, y se va reduciendo conforme se amortiza el préstamo. Su contador debe confirmarlo antes de que usted cuente con ello."
+    : "Aquí no le voy a vender una deducción fiscal. Con una deducción estándar de "+money(std)+", lo más probable es que esta hipoteca no cambie su declaración federal el primer año. El argumento para comprar es el pago, el costo fijo de vivienda y la plusvalía, no la deducción. Confírmelo con su contador.";
 }
 
 /* ============================ faq ============================ */
