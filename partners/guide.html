@@ -581,9 +581,10 @@ var LO = {
   response: "Calls returned within the hour"
 };
 
-/* ---- Partners. Add one line per partner, then send them guide.html?p=<key>. ---- */
+/* ---- Partners. Add one line per partner. `path` is their short link (/preston);
+   add the same path as a rewrite in vercel.json. guide.html?p=<key> also works. ---- */
 var PARTNERS = {
-  "preston-tribble": { name: "Preston Tribble" }
+  "preston-tribble": { name: "Preston Tribble", path: "preston" }
 };
 
 (function(){
@@ -596,6 +597,10 @@ var PARTNERS = {
 
   var key = "";
   try { key = (new URLSearchParams(location.search).get("p") || "").toLowerCase(); } catch (e) {}
+  if (!PARTNERS[key]) {
+    var seg = location.pathname.replace(/\/+$/, "").split("/").pop().toLowerCase();
+    Object.keys(PARTNERS).forEach(function(k){ if (PARTNERS[k].path === seg) key = k; });
+  }
   var p = PARTNERS[key];
   if (p) {
     document.getElementById("partnerName").textContent = p.name;
