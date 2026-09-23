@@ -9,3 +9,10 @@ Source of truth is `bison-field-manual.html` in the Bison partner toolkit; this 
 holds the built web edition produced by `build_web.py`. Do not hand-edit `index.html`.
 
 Bison Ventures LLC | NMLS #2257632 | Equal Housing Lender
+
+## Partner Playbook
+
+`partners/guide.html` is a standalone partner guide (mortgage cheat sheet, deal scripts,
+organization and sales plays). It is hand-edited, not built. To personalize it for a partner,
+add a line to `PARTNERS` near the bottom of the file and send `partners/guide.html?p=<key>`.
+Loan officer contact details live in the `LO` object in the same script block.
