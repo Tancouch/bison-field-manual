@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/preston", "destination": "/partners/guide.html" }
+  ]
+}

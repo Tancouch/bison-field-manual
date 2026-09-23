@@ -15,5 +15,6 @@
 ## Repo
 - `index.html` and `es/` are built output from `build_web.py` in the partner toolkit. Do not
   hand-edit them. Brand changes to the Field Manual belong in the toolkit source.
-- `partners/guide.html` is hand-edited. Add partners to `PARTNERS` near the bottom.
+- `partners/guide.html` is hand-edited. New partner: add them to `PARTNERS` near the bottom
+  with a short `path`, and add a matching `/<path>` rewrite in `vercel.json`.
 - Pushes to `main` deploy to Vercel.
