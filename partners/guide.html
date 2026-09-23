@@ -581,8 +581,9 @@ var LO = {
   response: "Calls returned within the hour"
 };
 
-/* ---- Partners. Add one line per partner. `path` is their short link (/preston);
-   add the same path as a rewrite in vercel.json. guide.html?p=<key> also works. ---- */
+/* ---- Any partner: send /for/first-last and the name is read from the link.
+   Nothing to add here. The entries below are legacy short links (/preston),
+   each with a matching rewrite in vercel.json. ---- */
 var PARTNERS = {
   "preston-tribble": { name: "Preston Tribble", path: "preston" }
 };
@@ -602,6 +603,17 @@ var PARTNERS = {
     Object.keys(PARTNERS).forEach(function(k){ if (PARTNERS[k].path === seg) key = k; });
   }
   var p = PARTNERS[key];
+  var m = location.pathname.match(/^\/for\/([^\/]+)\/?$/);
+  if (!p && m) {
+    var raw = "";
+    try { raw = decodeURIComponent(m[1]); } catch (e) {}
+    var name = raw.replace(/[-_+.]+/g, " ").replace(/[^\p{L}' ]/gu, "").replace(/\s+/g, " ").trim().slice(0, 60)
+      .split(" ").map(function(w){
+        if (/\p{Lu}/u.test(w.slice(1))) return w;
+        return w.toLowerCase().replace(/(^|')(\p{L})/gu, function(_, a, c){ return a + c.toUpperCase(); });
+      }).join(" ");
+    if (name) p = { name: name };
+  }
   if (p) {
     document.getElementById("partnerName").textContent = p.name;
     document.getElementById("prepFor").hidden = false;

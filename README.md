@@ -14,6 +14,7 @@ Bison Ventures LLC | NMLS #2257632 | Equal Housing Lender
 
 `partners/guide.html` is a standalone partner guide (mortgage cheat sheet, deal scripts,
 organization and sales plays). It is hand-edited, not built. To personalize it for a partner,
-add a line to `PARTNERS` near the bottom of the file with a short `path` (e.g. `preston`), and
-add a matching rewrite to `vercel.json`. Send them `/<path>`; `partners/guide.html?p=<key>` also works.
+send `/for/first-last` (e.g. `/for/jane-doe`); the page reads the name from the link and shows
+"Prepared for Jane Doe". Nothing needs to change in the repo. `/preston` is an older short link
+kept in `PARTNERS` and `vercel.json`.
 Loan officer contact details live in the `LO` object in the same script block.
