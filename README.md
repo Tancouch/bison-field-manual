@@ -1,7 +1,7 @@
 # Bison Field Manual
 
 Partner education manual for real estate agents and financial advisors working with
-Bison Ventures. Product library, full PITI calculator, and tax-position analyzer.
+Bison Mortgage. Product library, full PITI calculator, and tax-position analyzer.
 
 Static site. Deployed automatically to Vercel on every push to `main`.
 
