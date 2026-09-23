@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/for/:name", "destination": "/partners/guide.html" },
     { "source": "/preston", "destination": "/partners/guide.html" }
   ]
 }
